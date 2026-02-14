@@ -33,16 +33,16 @@ Replica Region: us-east-1
 
 #  Features Implemented
 
-✔ KMS encrypted S3 buckets (both regions)  
-✔ Cross-region replication (CRR)  
-✔ S3 versioning enabled  
-✔ Multi-tier lifecycle transitions  
-✔ Strict IAM replication role (no wildcard permissions)  
-✔ Bucket policy enforcing KMS encryption  
-✔ Object Lock (Compliance mode, 30 days retention)  
-✔ SNS email notifications on replication failure  
-✔ CloudWatch alarm for replication latency  
-✔ Remote Terraform backend with state locking  
+- KMS encrypted S3 buckets (both regions)  
+- Cross-region replication (CRR)  
+- S3 versioning enabled  
+- Multi-tier lifecycle transitions  
+- Strict IAM replication role (no wildcard permissions)  
+- Bucket policy enforcing KMS encryption  
+- Object Lock (Compliance mode, 30 days retention)  
+- SNS email notifications on replication failure  
+- CloudWatch alarm for replication latency  
+- Remote Terraform backend with state locking  
 
 ---
 
@@ -70,6 +70,3 @@ cd prod
 terraform init  
 terraform plan  
 terraform apply  
-
----
-
