@@ -7,9 +7,13 @@ module "kms" {
 }
 
 module "iam" {
-  source      = "../modules/iam"
-  kms_key_arn = module.kms.primary_kms_key_arn
+  source = "../modules/iam"
+  source_bucket_arn      = module.s3.primary_bucket_arn
+  destination_bucket_arn = module.s3.replica_bucket_arn
+  primary_kms_arn        = module.kms.primary_kms_key_arn
+  replica_kms_arn        = module.kms.replica_kms_key_arn
 }
+
 
 module "sns" {
   source = "../modules/sns"
@@ -34,4 +38,5 @@ module "s3" {
 module "cloudwatch" {
   source        = "../modules/cloudwatch"
   sns_topic_arn = module.sns.sns_topic_arn
+  bucket_name   = var.bucket_name
 }

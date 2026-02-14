@@ -8,4 +8,8 @@ resource "aws_cloudwatch_metric_alarm" "replication_lag" {
   threshold           = 900
   comparison_operator = "GreaterThanThreshold"
   alarm_actions       = [var.sns_topic_arn]
+
+  dimensions = {
+    BucketName = var.bucket_name
+  }
 }

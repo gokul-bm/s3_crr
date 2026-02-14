@@ -77,6 +77,47 @@ resource "aws_s3_bucket_replication_configuration" "replication" {
   }
 }
 
+resource "aws_s3_bucket_server_side_encryption_configuration" "replica" {
+  provider = aws.replica
+  bucket   = aws_s3_bucket.replica.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm     = "aws:kms"
+      kms_master_key_id = var.replica_kms_key_arn
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "enforce_encryption" {
+  bucket = aws_s3_bucket.primary.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid = "DenyUnEncryptedObjectUploads"
+        Effect = "Deny"
+        Principal = "*"
+        Action = "s3:PutObject"
+        Resource = "${aws_s3_bucket.primary.arn}/*"
+        Condition = {
+          StringNotEquals = {
+            "s3:x-amz-server-side-encryption" = "aws:kms"
+          }
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_s3_bucket" "replica" {
+  provider = aws.replica
+  bucket   = var.replica_bucket_name
+  object_lock_enabled = true
+}
+
+
 resource "aws_s3_bucket_notification" "replication_failure" {
   bucket = aws_s3_bucket.primary.id
   topic {
